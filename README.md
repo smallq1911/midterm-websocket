@@ -2,3 +2,4 @@
 Modules needed:
 - ws
 - ExpressJS
+- http
