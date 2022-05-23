@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midterm Websocket demo</title>
+</head>
+<body>
+    <h1>Websocket Demo</h1>
+    <div class="container">
+        <ul class="chatbox"></ul>
+    </div>
+    <form class="chat-form" action="">
+        <input type="text" class="chat-msg">
+        <button class="send-btn" onclick="sendMsg()">Send</button>
+    </form>
+</body>
+<script>
+
+    //create connection
+    const socket = new WebSocket('ws://localhost:3000')
+
+    //open connection
+    socket.addEventListener('open', (event) =>{
+        console.log('connected to server')
+    })
+    
+    //listen msg
+    const chatBox = document.querySelector('.chatbox')
+    socket.addEventListener('message', (event) => {
+        console.log('msg from server: ', event.data)
+        const chatItem = document.createElement('li')
+        chatItem.textContent = event.data
+
+        chatBox.appendChild(chatItem)
+    })
+
+
+    //chat
+    const name = prompt('Input a username')
+    const chatForm = document.querySelector('.chat-form')
+    const chatMsg = document.querySelector('.chat-msg')
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const msg = name + ': ' + chatMsg.value
+        socket.send(msg)
+        chatMsg.value = ''
+    })
+</script>
+</html>
